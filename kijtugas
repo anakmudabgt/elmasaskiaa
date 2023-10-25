@@ -1,0 +1,63 @@
+def encrypt_transposition_cipher(key, plaintext):
+    # Menghitung jumlah baris yang diperlukan berdasarkan panjang plaintext dan kunci
+    num_rows = len(plaintext) // key
+    if len(plaintext) % key != 0:
+        num_rows += 1
+
+    # Inisialisasi matriks kosong untuk menyimpan plaintext
+    matrix = [[' ' for _ in range(key)] for _ in range(num_rows)]
+
+    # Mengisi matriks dengan karakter-karakter dari plaintext
+    row, col = 0, 0
+    for char in plaintext:
+        matrix[row][col] = char
+        col += 1
+        if col == key:
+            col = 0
+            row += 1
+
+    # Membaca karakter-karakter dari matriks baris per baris untuk mendapatkan ciphertext
+    ciphertext = ''
+    for i in range(key):
+        for j in range(num_rows):
+            ciphertext += matrix[j][i]
+
+    return ciphertext
+
+def decrypt_transposition_cipher(key, ciphertext):
+    # Menghitung jumlah baris yang diperlukan berdasarkan panjang ciphertext dan kunci
+    num_rows = len(ciphertext) // key
+    if len(ciphertext) % key != 0:
+        num_rows += 1
+
+    # Inisialisasi matriks kosong untuk menyimpan ciphertext
+    matrix = [[' ' for _ in range(key)] for _ in range(num_rows)]
+
+    # Mengisi matriks dengan karakter-karakter dari ciphertext
+    col, row = 0, 0
+    for char in ciphertext:
+        matrix[row][col] = char
+        row += 1
+        if row == num_rows:
+            row = 0
+            col += 1
+
+    # Membaca karakter-karakter dari matriks baris per baris untuk mendapatkan plaintext
+    plaintext = ''
+    for i in range(num_rows):
+        for j in range(key):
+            plaintext += matrix[i][j]
+
+    return plaintext
+
+# Contoh penggunaan
+plaintext = "H E L L O   W O R L D"
+key = 8
+
+# Enkripsi plaintext
+ciphertext = encrypt_transposition_cipher(key, plaintext)
+print("Ciphertext:", ciphertext)
+
+# Dekripsi ciphertext
+decrypted_text = decrypt_transposition_cipher(key, ciphertext)
+print("Plaintext setelah didekripsi:", decrypted_text)
